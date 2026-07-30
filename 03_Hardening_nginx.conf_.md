@@ -1,8 +1,16 @@
+
+---
+
 Hardening Nginx adalah proses mengamankan konfigurasi Nginx agar server tidak mudah diserang (*exploit*), meminimalkan kebocoran informasi, dan menolak lalu lintas berbahaya.
 
 Berikut adalah langkah-langkah **hardening Nginx** yang paling efektif beserta **efek langsungnya** pada sistem Anda.
 
 ---
+## 0. Buat File
+
+```bash
+sudo nano /etc/nginx/conf.d/<nama_file>.conf
+```
 
 ## 1. Sembunyikan Versi Nginx (*Server Tokens*)
 
@@ -10,13 +18,8 @@ Secara bawaan, Nginx menampilkan versi spesifiknya pada *header* HTTP dan halama
 
 ### Cara Konfigurasi:
 
-Buka file `/etc/nginx/nginx.conf` dan pastikan direktif berikut ada di dalam blok `http`:
-
 ```nginx
-http {
     server_tokens off;
-}
-
 ```
 
 * **Efek Positif:** Peretas tidak bisa lagi melihat versi Nginx Anda melalui *header* HTTP (`Server: nginx`) atau halaman error 404/500.
@@ -30,10 +33,7 @@ Serangan *Buffer Overflow* atau *Denial of Service* (DoS) sering dilakukan denga
 
 ### Cara Konfigurasi:
 
-Tambahkan batasan ini di blok `http` pada `/etc/nginx/nginx.conf`:
-
 ```nginx
-http {
     # Batasi ukuran body request (misal: upload file maks 10MB)
     client_max_body_size 10M;
 
@@ -41,8 +41,6 @@ http {
     client_body_buffer_size 128k;
     client_header_buffer_size 1k;
     large_client_header_buffers 4 4k;
-}
-
 ```
 
 * **Efek Positif:** Mencegah peretas membebani RAM server dengan payload raksasa.
@@ -56,7 +54,7 @@ Security headers menginstruksikan browser klien untuk menerapkan perlindungan ek
 
 ### Cara Konfigurasi:
 
-Tambahkan baris berikut di dalam blok `server` atau `http`:
+Tambahkan baris berikut di dalam blok `server (/etc/nginx/sites-available/<nama_file>)`  atau `http (/etc/nginx/conf.d/<nama_file>.conf)`:
 
 ```nginx
 # Mencegah situs Anda dimasukkan ke dalam <iframe/frame> (Anti-Clickjacking)
@@ -87,7 +85,7 @@ Secara umum, aplikasi web hanya membutuhkan method `GET`, `POST`, dan `HEAD`. Me
 
 ### Cara Konfigurasi:
 
-Di dalam blok `location /` pada konfigurasi site Anda:
+Di dalam blok `location / (/etc/nginx/sites-available/<nama_file>)` pada konfigurasi site Anda:
 
 ```nginx
 location / {
@@ -109,7 +107,7 @@ Fitur ini membatasi berapa kali IP yang sama bisa mengirimkan *request* dalam pe
 
 ### Cara Konfigurasi:
 
-1. Di blok `http`:
+1. Di blok `http (/etc/nginx/conf.d/<nama_file>.conf)`:
 ```nginx
 # Membuat zona bernama 'one' dengan alokasi memori 10MB, maks 10 request/detik per IP
 limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
@@ -117,7 +115,7 @@ limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
 ```
 
 
-2. Di blok `location` (misal halaman login):
+2. Di blok `location (/etc/nginx/sites-available/<nama_file>)` (misal halaman login):
 ```nginx
 location /login/ {
     limit_req zone=one burst=5 nodelay;
@@ -138,7 +136,7 @@ Banyak framework atau CMS menyisakan file konfigurasi (`.env`, `.git`, `.htacces
 
 ### Cara Konfigurasi:
 
-Tambahkan blok ini di konfigurasi `server`:
+Tambahkan blok ini di konfigurasi `server (/etc/nginx/sites-available/<nama_file>)`:
 
 ```nginx
 # Blokir semua file yang diawali dengan titik (seperti .env, .git)
