@@ -1,3 +1,9 @@
+# Cek Dependency
+
+```cmd
+apt depends nginx
+```
+
 # Install
 
 ```cmd
