@@ -9,3 +9,8 @@ Perintah,Fungsi
 `sudo systemctl reload nginx`, Memuat ulang konfigurasi tanpa downtime
 
 `sudo nginx -t` ,Menguji apakah ada kesalahan sintaks pada konfigurasi
+
+shorthand
+```bash
+sudo nginx -t && sudo systemctl reload nginx && sudo systemctl status nginx
+```
