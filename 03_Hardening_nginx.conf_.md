@@ -21,7 +21,7 @@ Secara bawaan, Nginx menampilkan versi spesifiknya pada *header* HTTP dan halama
 Tambahkan baris berikut di dalam blok `http (/etc/nginx/conf.d/<nama_file>.conf)`:
 
 ```nginx
-    server_tokens off;
+server_tokens off;
 ```
 
 * **Efek Positif:** Peretas tidak bisa lagi melihat versi Nginx Anda melalui *header* HTTP (`Server: nginx`) atau halaman error 404/500.
@@ -38,13 +38,13 @@ Serangan *Buffer Overflow* atau *Denial of Service* (DoS) sering dilakukan denga
 Tambahkan baris berikut di dalam blok `http (/etc/nginx/conf.d/<nama_file>.conf)`:
 
 ```nginx
-    # Batasi ukuran body request (misal: upload file maks 10MB)
-    client_max_body_size 10M;
+# Batasi ukuran body request (misal: upload file maks 10MB)
+client_max_body_size 10M;
 
-    # Batasi ukuran header request
-    client_body_buffer_size 128k;
-    client_header_buffer_size 1k;
-    large_client_header_buffers 4 4k;
+# Batasi ukuran header request
+client_body_buffer_size 128k;
+client_header_buffer_size 1k;
+large_client_header_buffers 4 4k;
 ```
 
 * **Efek Positif:** Mencegah peretas membebani RAM server dengan payload raksasa.
