@@ -224,3 +224,58 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
 #       }
 #}
 ```
+# FINAL
+
+```nginx
+# 1. BLOK HTTP: Paksa pindah (redirect) semua lalu lintas ke HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name domainanda.com www.domainanda.com;
+
+    # Redirect permanen ke HTTPS
+    return 301 https://$host$request_uri;
+}
+
+# 2. BLOK HTTPS: Server Utama
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name domainanda.com www.domainanda.com;
+
+    # Lokasi File Website Anda
+    root /var/www/domainanda;
+    index index.html index.htm;
+
+    # --- SERTIFIKAT SSL ---
+    # Ubah path sesuai sertifikat SSL Anda (misal Let's Encrypt / Certbot)
+    ssl_certificate /etc/letsencrypt/live/domainanda.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/domainanda.com/privkey.pem;
+
+    # Enkripsi TLS Modern & Aman (TLS 1.2 & 1.3 saja)
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    # --- SECURITY HEADERS DASAR ---
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+
+    # --- PENANGANAN UTAMA ---
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # --- HARDENING: Blokir Akses ke File Tersembunyi (seperti .env, .git) ---
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    # --- HARDENING: Mencegah Eksekusi Skrip di Folder Uploads (Opsional) ---
+    location ~* /(uploads|images)/.*\.php$ {
+        deny all;
+    }
+}
+```
