@@ -279,3 +279,8 @@ server {
     }
 }
 ```
+# Buat Symlink
+
+```bash
+sudo ln -s /etc/nginx/sites-available/domainanda.com /etc/nginx/sites-enabled/
+```
