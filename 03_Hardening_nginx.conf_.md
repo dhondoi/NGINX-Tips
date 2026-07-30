@@ -18,6 +18,8 @@ Secara bawaan, Nginx menampilkan versi spesifiknya pada *header* HTTP dan halama
 
 ### Cara Konfigurasi:
 
+Tambahkan baris berikut di dalam blok `http (/etc/nginx/conf.d/<nama_file>.conf)`:
+
 ```nginx
     server_tokens off;
 ```
@@ -32,6 +34,8 @@ Secara bawaan, Nginx menampilkan versi spesifiknya pada *header* HTTP dan halama
 Serangan *Buffer Overflow* atau *Denial of Service* (DoS) sering dilakukan dengan mengirimkan request payload atau header berukuran sangat besar untuk menghabiskan memori server.
 
 ### Cara Konfigurasi:
+
+Tambahkan baris berikut di dalam blok `http (/etc/nginx/conf.d/<nama_file>.conf)`:
 
 ```nginx
     # Batasi ukuran body request (misal: upload file maks 10MB)
