@@ -24,6 +24,9 @@ server {
         listen 80;
         listen [::]:80;
         server_name domainanda.com www.domainanda.com;
+        allow 127.0.0.1;
+        allow ::1;
+        deny all;
 
         # --- WAJIB UNTUK LARAVEL ---
         root /var/www/domainanda/public;
