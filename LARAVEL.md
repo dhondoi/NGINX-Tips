@@ -15,9 +15,12 @@ limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
 # 2. BLOK HTTP (Redirect ke HTTPS)
 # ==========================================
 server {
-        listen 80;
-        listen [::]:80;
-        server_name domainanda.com www.domainanda.com; # Ganti dengan domain Anda
+        listen 127.0.0.1:80;
+        listen [::1]:80;
+        server_name domainanda.com www.domainanda.com;
+        allow 127.0.0.1;
+        allow ::1;
+        deny all;
 
         # Redirect permanen semua trafik HTTP ke HTTPS
         return 301 https://$host$request_uri;
