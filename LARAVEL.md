@@ -31,6 +31,13 @@ server {
         listen 443 ssl http2;
         listen [::]:443 ssl http2;
         server_name domainanda.com www.domainanda.com;
+        # Hanya izinkan localhost / loopback (Cloudflare Tunnel mengirim via localhost)
+        allow 127.0.0.1;
+        allow ::1;
+        # Jika cloudflared running di dalam Docker Container, masukkan subnet Docker (opsional):
+        # allow 172.16.0.0/12;
+        # Tolak semua IP lainnya (Termasuk IP Lokal 192.168.x.x)
+        deny all;
 
         # --- WAJIB UNTUK LARAVEL ---
         root /var/www/domainanda/public; # Harus mengarah ke folder public
@@ -100,4 +107,10 @@ server {
                 deny all;
         }
 }
+```
+---
+# Buat Symlink
+
+```bash
+sudo ln -s /etc/nginx/sites-available/domainanda.com /etc/nginx/sites-enabled/
 ```
