@@ -21,8 +21,8 @@ limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
 # 2. BLOK SERVER UTAMA (Hanya Port 80 - CF Tunnel yang akan handle HTTPS di luar)
 # ==========================================
 server {
-        listen 80;
-        listen [::]:80;
+        listen 127.0.0.1:80;
+        listen [::1]:80;
         server_name domainanda.com www.domainanda.com;
         allow 127.0.0.1;
         allow ::1;
