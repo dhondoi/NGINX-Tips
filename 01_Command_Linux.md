@@ -14,3 +14,7 @@ shorthand
 ```bash
 sudo nginx -t && sudo systemctl reload nginx && sudo systemctl status nginx
 ```
+buat symlink
+```bash
+sudo ln -s /etc/nginx/sites-available/domainanda.com /etc/nginx/sites-enabled/
+```
