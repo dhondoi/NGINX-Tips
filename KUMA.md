@@ -22,14 +22,12 @@ limit_req_zone $binary_remote_addr zone=kuma_limit:10m rate=30r/s;
 # 2. BLOK SERVER UTAMA (Hanya Port 80 - CF Tunnel)
 # ==========================================
 server {
-        listen 80;
-        listen [::]:80;
+        listen 127.0.0.1:80;
+        listen [::1]:80;
         server_name domainanda.com www.domainanda.com;
-        
-        # Keamanan akses: Hanya izinkan dari localhost (Cloudflare Tunnel daemon)
-        allow 127.0.0.1;
-        allow ::1;
-        deny all;
+        #allow 127.0.0.1;
+        #allow ::1;
+        #deny all;
 
         # --- SECURITY HEADERS ---
         # Catatan: Ubah "SAMEORIGIN" jika kamu ingin embed Status Page Kuma di iframe website lain
